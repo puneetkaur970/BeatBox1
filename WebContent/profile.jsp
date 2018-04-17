@@ -18,8 +18,24 @@
   </head>
   <body>
 	
+	<% 
+  if(session.getAttribute("email")!=null)
+  {
+	  %>  
+    <%@ include file="header1.jsp"%>
+    
+    <%
+  } else{
+	  
+  
+    %>
+    <%@ include file="header.jsp"%>
+   <%
+  }
+   %> 
+	
 	<!-- importing the header.jsp using jstl and other tags -->
-	<jsp:include page="header.jsp"></jsp:include>
+	
 	
 	<% 
 		if(request.getAttribute("subscriptionStatus")!=null){ 
@@ -33,12 +49,12 @@
 	<jsp:useBean id="user" scope="request" type="com.test.beans.User"></jsp:useBean>
 
     <div class=" container text-center m-5">
-         <img src="images/userImages/user.jpg" class="img-fluid rounded-circle m-3" alt="User Image" max-width: 100%;  height: auto; style="width:200px" > 
+         <img src="<%=user.getImgPath() %>" class="img-fluid rounded-circle m-1" alt="User Image" width="200" height="200" > 
       
       
         <br>
         <div class="container m-5">
-        <table class="table" >
+        <table class="table"  >
        
         <tbody>
 
@@ -138,12 +154,16 @@
        <form class="form text-align-left" action="ViewPlaylistsTracks" method="get"> 
        
   <div>
+
  <%
- 	if(request.getAttribute("playlists")!= null){
+ 	int hideSubmit=0;
  		
  	List<Playlist> playlists= (List<Playlist>)request.getAttribute("playlists");
  	Iterator<Playlist> iterator = playlists.iterator();
  	
+ 	if(!iterator.hasNext()){
+ 		hideSubmit=1;
+ 	}
  	while(iterator.hasNext()){
  		Playlist p= iterator.next();
  		
@@ -155,24 +175,25 @@
     
        <%
      	}
- 	}
- 	else{
- 		%>
- 		<strong> Please login first!! </strong>
- 		<% 
  	
+ 	if(hideSubmit==1){
+ 		%>
+ 		<strong>You have no playlist!! Create a playlist first! </strong>
+ 		<% 
  	}
- %>
+ 	
+ 	
+ 	%>
+ 	
   </div>
   <div>
    <%
- 	if(request.getAttribute("playlists")!= null){
+ 	if(hideSubmit!=1){
  	 		
  	%>
     <button class="btn btn-primary" type="submit">View Playlist Tracks</button>
    <%
- 	
-}
+ 		}
 	%>
   </div>
 </form>

@@ -19,7 +19,21 @@
   </head>
   <body>
   
+    <% 
+  if(session.getAttribute("email")!=null)
+  {
+	  %>  
+    <%@ include file="header1.jsp"%>
+    
+    <%
+  } else{
+	  
+  
+    %>
     <%@ include file="header.jsp"%>
+   <%
+  }
+   %> 
     
     
     <%
@@ -81,8 +95,13 @@
 
 
     <div class="container my-3 text-center">
-      
-      <a  class="btn btn-primary" href=" <%= trackdetails.track.getTrackLink() %>"  role="button" download >Download audio </a>
+    
+    <form method="get" action="downloadTrack">
+    <input type="hidden" name="tracklink" value="<%= trackdetails.track.getTrackLink() %>">
+    <button class=" btn btn-primary" type="submit" >Download</button>
+    
+    </form><br>
+  
 
        <a class="btn btn-primary" href= "LikeTrack?TrackId=<%= trackdetails.track.getTrackId() %>">Like</a>
        <a class="btn btn-primary" href="#playlistform" data-toggle="modal" >Add to playlist</a>
@@ -110,38 +129,45 @@
        <input type="hidden" name="trackId" value="<%= trackdetails.track.getTrackId() %>">
   <div>
  <%
- 	if(request.getAttribute("playlists")!= null){
- 		
- 	List<Playlist> playlists= (List<Playlist>)request.getAttribute("playlists");
- 	Iterator<Playlist> iterator = playlists.iterator();
- 	
- 	while(iterator.hasNext()){
- 		Playlist p= iterator.next();
+ int hideSubmit=0;
+ if(session.getAttribute("email")==null){
+		%>
+		<strong>Please log in first!! </strong>
+		<% 
+	
+	}else
+		{
+				
+		 	List<Playlist> playlists= (List<Playlist>)request.getAttribute("playlists");
+		 	Iterator<Playlist> iterator = playlists.iterator();
+		 	if(!iterator.hasNext()){
+		 			hideSubmit=1;
+		 		%>
+		 		
+		 		<strong> You have no playlist!! </strong>
+		 	<% } else{
+		 	while(iterator.hasNext()){
+		 		Playlist p= iterator.next();
  		
  		%>
 	
     <input type="radio"
            name="playlistId" value="<%= p.getPlaylistId() %>">
     <label for="contactChoice1"><%= p.getPlaylistName() %></label><br>
-    
+   
        <%
      	}
  	}
- 	else{
- 		%>
- 		<strong> Please login first!! </strong>
- 		<% 
- 	
- 	}
+	}
  %>
   </div>
   <div>
    <%
- 	if(request.getAttribute("playlists")!= null){
+ 	if(hideSubmit!=1){
  		
  	%>
-    <button class="btn btn-primary" type="submit" >Submit</button>
-<%
+    <button class="btn btn-primary" type="submit" >Submit</button> 
+	<%
  	}
 	%>
   </div>

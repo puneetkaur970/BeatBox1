@@ -45,8 +45,7 @@ public class AddTracksToPlaylistServlet extends HttpServlet {
 			String addTrackToPlaylistStatus=" Couldn't add track. Some error occured";
 			request.setAttribute("addTrackToPlaylistStatus", addTrackToPlaylistStatus);
 		}
-		
-		System.out.println(status);
+	
 		request.getRequestDispatcher("playTrack?TrackId="+TrackId).forward(request, response);
 	}
 

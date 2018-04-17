@@ -109,11 +109,10 @@ public class ApplicationDao {
 		int rowsAffected =0;
 		
 		try {
-			
-			
+		
 		//	System.out.println("I am in Application Dao and connection is made.");
 			
-			String insertQuery= "insert into users ( Email, Password, firstname , lastname, dob, gender, about) values(?,?,?,?,?,?,?)";
+			String insertQuery= "insert into users ( Email, Password, firstname , lastname, dob, gender, about,user_img) values(?,?,?,?,?,?,?,?)";
 			java.sql.PreparedStatement statement = connection.prepareStatement(insertQuery);
 			statement.setString(1, user.getEmail());
 			statement.setString(2, user.getPassword());
@@ -122,6 +121,10 @@ public class ApplicationDao {
 			statement.setString(5, user.getDateOfBirth());
 			statement.setString(6, user.getGender());
 			statement.setString(7, user.getAboutYou());
+			statement.setString(8, user.getImgPath());
+			
+			System.out.println(user.getImgPath());
+			System.out.println(statement);
 			
 			rowsAffected = statement.executeUpdate();
 			
@@ -327,6 +330,7 @@ public class ApplicationDao {
 				user.setAboutYou(set.getString("about"));
 				user.setDownloadCount(set.getInt("downloadCount"));
 				user.setEmail(set.getString("email"));
+				user.setImgPath(set.getString("user_img"));
 			}
 			
 		//	System.out.println("got user: ");
@@ -578,5 +582,44 @@ public List<Tracks> viewPlaylistTracks(int PlaylistId,Connection connection){
 		  e.printStackTrace();
 	}
 	return TrackList;
+}
+
+public int validateDownloadPermission(Connection connection,  String email) {
+	
+	String query="select downloadCount, songs_offered from users, subscriptionplan where users.email='"+ email +"' and users.Subscription_Id=subscriptionplan.subscription_id";
+	int downloadCount=0;
+	int songsOffered=0;
+	int status=0;
+	ResultSet set;
+	try {
+		Statement statement= connection.createStatement();
+		set=statement.executeQuery(query);
+		if(set.next()) {
+			downloadCount = set.getInt("downloadCount");
+			songsOffered= set.getInt("songs_offered");
+		}
+	}
+	catch(SQLException e) {
+		  e.printStackTrace();
+	}
+	
+	if(downloadCount< songsOffered) {
+		
+		status++;
+		String query1="update users set users.downloadCount=downloadCount + 1 where users.email='"+ email +"'";
+		try {
+			if(status==1) {
+			Statement statement= connection.createStatement();
+			statement.execute(query1);
+			}
+			
+		}
+		catch(SQLException e) {
+			  e.printStackTrace();
+		}
+		return status;
+	}
+	else
+		return 0;
 }
 }

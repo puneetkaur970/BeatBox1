@@ -18,7 +18,21 @@
 </head>
 <body>
 
-<%@ include file="header.jsp" %>
+<% 
+  if(session.getAttribute("email")!=null)
+  {
+	  %>  
+    <%@ include file="header1.jsp"%>
+    
+    <%
+  } else{
+	  
+  
+    %>
+    <%@ include file="header.jsp"%>
+   <%
+  }
+   %> 
       
       <div class="container" id="trackslist">
            <h3>List of tracks related to search : </h3>

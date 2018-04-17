@@ -27,6 +27,11 @@ public class ViewPlaylistsTracksServlet extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
+		
+		if(req.getParameter("playlistId")==null) {
+			req.getRequestDispatcher("error.jsp").forward(req, resp);
+		}
+		
 		int PlayListId= Integer.parseInt(req.getParameter("playlistId"));
 		//int PlayListId=18;
 		Connection connection = (Connection)getServletContext().getAttribute("dbconnection");

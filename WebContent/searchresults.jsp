@@ -24,7 +24,21 @@
   </head>
   <body>
       
-      <%@ include file="header.jsp" %>
+     <% 
+  if(session.getAttribute("email")!=null)
+  {
+	  %>  
+    <%@ include file="header1.jsp"%>
+    
+    <%
+  } else{
+	  
+  
+    %>
+    <%@ include file="header.jsp"%>
+   <%
+  }
+   %> 
      
       
       <div class="container" id="trackslist">
@@ -99,7 +113,7 @@
        
           <form>
             <tr id="ArtistContainer">
-              <td><img src="<%= artist.getArtistImg() %>"  height="150"; width="150" class="img-thumbnail rounded-circle"></td>
+              <td><img src="<%= artist.getArtistImg() %>"  height="150" width="150" class="img-thumbnail rounded-circle"></td>
               <td><%= artist.getArtistName() %></td>
               <td><a class="btn btn-primary" href= "ArtistTracks?artistId=<%= artist.getArtistId() %>">Click </a></td>
             </tr>
@@ -138,7 +152,7 @@
 		%>
           <form>
             <tr>
-              <td><img src="<%= album.getAlbumImg() %>"  height="150"; width="150" class="img-thumbnail rounded-circle"></td>
+              <td><img src="<%= album.getAlbumImg() %>"  height="150" width="150" class="img-thumbnail rounded-circle"></td>
               <td><%= album.getAlbumName() %></td>
               <td><%= album.getReleaseDate() %></td>
               <td><a class="btn btn-primary" href= "AlbumTracks?albumId=<%=album.getAlbumId() %>">Click </a></td>
